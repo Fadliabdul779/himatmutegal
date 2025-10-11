@@ -13,6 +13,11 @@ Lihat catatan rilis lengkap di [`CHANGELOG.md`](./CHANGELOG.md) dan halaman [Rel
 - Framework: Next.js, Output: `.next`, Build: `npm run build`
 - Node.js: gunakan versi `20` (Project Settings → General → Node.js Version)
 
+### Production URL
+
+- Production: https://<project>.vercel.app
+- Jika sudah ada custom domain, ganti dengan `https://himinformatika.id` (contoh)
+
 ## Environment Variables (Production)
 
 Tambahkan variabel berikut di Vercel (Project Settings → Environment Variables):
