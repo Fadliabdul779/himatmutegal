@@ -1,103 +1,139 @@
-import Image from "next/image";
+import Link from "next/link";
+import { upcomingEvents } from "../lib/data";
+import EventCard from "../components/EventCard";
+import { getSiteSettings } from "../lib/site";
 
-export default function Home() {
+export default async function HomePage() {
+  const nextEvent = upcomingEvents()[0];
+  const settings = await getSiteSettings();
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div>
+      <section className="px-6 py-16 md:py-24 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--secondary)]/10">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="font-heading text-3xl md:text-5xl font-bold tracking-tight">
+            <span className="brand-gradient">{settings.heroTitle}</span> — {settings.campusName}
+          </h1>
+          <p className="mt-4 text-lg md:text-xl text-slate-700">
+            {settings.heroSubtitle}
+          </p>
+          <div className="mt-8 flex gap-4">
+            <Link
+              href="/membership"
+              className="inline-flex items-center rounded-lg bg-[var(--primary)] text-white px-5 py-3 shadow hover:scale-[1.03] transition"
+            >
+              Gabung Sekarang
+            </Link>
+            <Link
+              href="/events"
+              className="inline-flex items-center rounded-lg bg-[var(--secondary)] text-white px-5 py-3 hover:scale-[1.03] transition"
+            >
+              Lihat Kegiatan
+            </Link>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Section Login */}
+      <section className="px-6 py-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="inline-block w-6 h-6 bg-[var(--primary)] rounded" />
+            <h2 className="text-2xl font-semibold">Area Login</h2>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-4">
+            <Link href="/admin/login" className="block rounded-lg border p-4 hover:shadow-sm transition">
+              <div className="font-medium">Login Admin</div>
+              <p className="text-sm text-slate-600 mt-1">Masuk untuk mengelola konten situs.</p>
+            </Link>
+            <Link href="/struct/login" className="block rounded-lg border p-4 hover:shadow-sm transition">
+              <div className="font-medium">Login Struktural</div>
+              <p className="text-sm text-slate-600 mt-1">Akses internal pengurus dan struktural.</p>
+            </Link>
+            <Link href="/member/login" className="block rounded-lg border p-4 hover:shadow-sm transition">
+              <div className="font-medium">Login Anggota Hima</div>
+              <p className="text-sm text-slate-600 mt-1">Masuk untuk fitur anggota dan resource.</p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 py-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="inline-block w-6 h-6 bg-[var(--primary)] rounded" />
+            <h2 className="text-2xl font-semibold">Acara Mendatang</h2>
+          </div>
+          {nextEvent ? (
+            <EventCard event={nextEvent} highlight />
+          ) : (
+            <p>Belum ada acara mendatang.</p>
+          )}
+        </div>
+      </section>
+
+      <section className="px-6 py-12 bg-[var(--neutral-50)]">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="inline-block w-6 h-6 bg-[var(--accent)] rounded" />
+            <h2 className="text-2xl font-semibold">Pengumuman</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[1,2,3].map((i) => (
+              <Link key={i} href="/news" className="block border rounded-lg p-4 hover:shadow-sm transition">
+                <div className="text-sm text-slate-500">12 Okt 2025</div>
+                <div className="mt-2 font-medium">Pengumuman #{i}</div>
+                <p className="mt-1 text-sm text-slate-600">Ringkasan singkat pengumuman kampus/organisasi.</p>
+                <span className="mt-3 inline-block text-[var(--primary)] text-sm">Baca selengkapnya →</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 py-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="inline-block w-6 h-6 bg-[var(--secondary)] rounded" />
+            <h2 className="text-2xl font-semibold">Program Kerja</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { title: 'Workshop Pemrograman', desc: 'Seri praktis mingguan untuk meningkatkan skill.' },
+              { title: 'Seminar & Talks', desc: 'Topik teknologi terkini bersama praktisi.' },
+              { title: 'Hackathon', desc: 'Ajang kompetisi membangun solusi nyata.' },
+            ].map((p) => (
+              <div key={p.title} className="border rounded-lg p-5">
+                <div className="font-medium">{p.title}</div>
+                <p className="mt-1 text-sm text-slate-600">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 py-12 bg-[var(--neutral-50)]">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="inline-block w-6 h-6 bg-[var(--primary)] rounded" />
+            <h2 className="text-2xl font-semibold">Ikuti Kami di Instagram</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, idx) => (
+              <a
+                key={idx}
+                href="https://instagram.com/hmpi_tmu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block aspect-square rounded-lg bg-gradient-to-br from-[var(--primary)]/20 to-[var(--secondary)]/20 hover:opacity-90"
+              />
+            ))}
+          </div>
+          <div className="mt-4">
+            <Link href="https://instagram.com/hmpi_tmu" target="_blank" className="text-[var(--primary)]">@hmpi_tmu</Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

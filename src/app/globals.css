@@ -1,26 +1,29 @@
 @import "tailwindcss";
 
+/* Palet brand */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0F1724; /* netral gelap */
+  --primary: #0B5FFF;    /* biru cerah */
+  --secondary: #00BFA6;  /* hijau mint */
+  --accent: #FFB86B;     /* oranye lembut */
+  --neutral-50: #F8FAFC; /* putih cerah */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Tipografi */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif;
+}
+
+.font-heading {
+  font-family: var(--font-poppins), var(--font-inter), system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif;
+}
+
+.brand-gradient {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
