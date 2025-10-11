@@ -1,5 +1,7 @@
 # himatmutegal
 
+![CI](https://github.com/Fadliabdul779/himatmutegal/actions/workflows/ci.yml/badge.svg)
+
 Situs resmi Himpunan Mahasiswa Informatika — Next.js + TailwindCSS
 
 ## Getting Started
