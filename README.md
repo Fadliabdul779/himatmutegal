@@ -6,6 +6,45 @@
 
 Lihat catatan rilis lengkap di [`CHANGELOG.md`](./CHANGELOG.md) dan halaman [Releases](https://github.com/Fadliabdul779/himatmutegal/releases).
 
+## Deployment
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Fadliabdul779/himatmutegal)
+
+- Framework: Next.js, Output: `.next`, Build: `npm run build`
+- Node.js: gunakan versi `20` (Project Settings → General → Node.js Version)
+
+## Environment Variables (Production)
+
+Tambahkan variabel berikut di Vercel (Project Settings → Environment Variables):
+
+```
+NEXTAUTH_URL=https://<project>.vercel.app
+NEXTAUTH_SECRET=<random-long-secret>
+
+NEXT_PUBLIC_SITE_URL=https://<project>.vercel.app
+NEXT_PUBLIC_SITE_NAME=Himpunan Mahasiswa Informatika
+NEXT_PUBLIC_GA_ID=G-XXXXXXX
+
+SANITY_PROJECT_ID=<id>
+SANITY_DATASET=production
+SANITY_API_TOKEN=<token>
+
+SENDGRID_API_KEY=<key>
+EMAIL_FROM=no-reply@himinformatika.id
+EMAIL_ADMIN=admin@himinformatika.id
+
+GOOGLE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/XXXXXXXX/exec
+
+GOOGLE_CLIENT_ID=<client-id>
+GOOGLE_CLIENT_SECRET=<client-secret>
+
+NEXT_TELEMETRY_DISABLED=1
+```
+
+Authorized redirect URIs (Google OAuth):
+- `https://<project>.vercel.app/api/auth/callback/google`
+- (opsional) tambahkan domain Preview jika diperlukan
+
 Situs resmi Himpunan Mahasiswa Informatika — Next.js + TailwindCSS
 
 ## Getting Started
