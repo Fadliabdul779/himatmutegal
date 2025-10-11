@@ -18,6 +18,20 @@ Lihat catatan rilis lengkap di [`CHANGELOG.md`](./CHANGELOG.md) dan halaman [Rel
 - Production: https://<project>.vercel.app
 - Jika sudah ada custom domain, ganti dengan `https://himinformatika.id` (contoh)
 
+### Deploy on Render (Alternatif selain GitHub Releases)
+
+- Tombol deploy: https://render.com/deploy?repo=https://github.com/Fadliabdul779/himatmutegal
+- File konfigurasi: `render.yaml` (otomatis terbaca oleh Render)
+- Build: `npm ci && npm run build`, Start: `npm run start`, Node: `20`
+- Tambahkan Environment Variables (Project → Environment):
+  - `NEXTAUTH_URL`, `NEXTAUTH_SECRET`
+  - `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SITE_NAME`, `NEXT_PUBLIC_GA_ID`
+  - `SANITY_PROJECT_ID`, `SANITY_DATASET`, `SANITY_API_TOKEN`
+  - `SENDGRID_API_KEY`, `EMAIL_FROM`, `EMAIL_ADMIN`
+  - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_SHEETS_WEBHOOK_URL`
+  - `NEXT_TELEMETRY_DISABLED=1`
+- OAuth redirect (Google): `https://<domain-render>/api/auth/callback/google`
+
 ## Environment Variables (Production)
 
 Tambahkan variabel berikut di Vercel (Project Settings → Environment Variables):
