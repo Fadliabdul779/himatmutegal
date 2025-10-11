@@ -2,6 +2,10 @@
 
 ![CI](https://github.com/Fadliabdul779/himatmutegal/actions/workflows/ci.yml/badge.svg)
 
+## Changelog
+
+Lihat catatan rilis lengkap di [`CHANGELOG.md`](./CHANGELOG.md) dan halaman [Releases](https://github.com/Fadliabdul779/himatmutegal/releases).
+
 Situs resmi Himpunan Mahasiswa Informatika — Next.js + TailwindCSS
 
 ## Getting Started
