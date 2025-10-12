@@ -16,8 +16,8 @@ Lihat catatan rilis lengkap di [`CHANGELOG.md`](./CHANGELOG.md) dan halaman [Rel
 
 ### Production URL
 
-- Production: https://<project>.vercel.app
-- Jika sudah ada custom domain, ganti dengan `https://himinformatika.id` (contoh)
+ - Production: https://himatikatmu-9671.vercel.app
+ - Jika sudah ada custom domain, ganti dengan `https://himinformatika.id` (contoh)
 
 ### Deploy on Render (Alternatif selain GitHub Releases)
 
