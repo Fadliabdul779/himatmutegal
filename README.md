@@ -12,6 +12,7 @@ Lihat catatan rilis lengkap di [`CHANGELOG.md`](./CHANGELOG.md) dan halaman [Rel
 
 - Framework: Next.js, Output: `.next`, Build: `npm run build`
 - Node.js: gunakan versi `20` (Project Settings → General → Node.js Version)
+- Contoh konfigurasi ENV: lihat `.env.example`
 
 ### Production URL
 
