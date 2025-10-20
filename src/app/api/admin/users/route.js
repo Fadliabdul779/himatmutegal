@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import bcrypt from 'bcryptjs';
-import { listUsers, updateUser, findUserByEmail, createUser } from '../../../../lib/users';
+import { listUsers, updateUser, findUserByEmail, createUser, deleteUser } from '../../../../lib/users';
 
 async function requireAdmin(req) {
   if (process.env.DISABLE_ADMIN_PROTECTION === 'true') return null;
@@ -57,5 +57,20 @@ export async function POST(req) {
     return NextResponse.json({ item: user });
   } catch (e) {
     return NextResponse.json({ message: 'Gagal membuat user' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req) {
+  const unauthorized = await requireAdmin(req);
+  if (unauthorized) return unauthorized;
+  try {
+    const url = new URL(req.url);
+    const id = url.searchParams.get('id');
+    if (!id) return NextResponse.json({ message: 'ID wajib' }, { status: 400 });
+    const { user, error } = deleteUser(id);
+    if (error) return NextResponse.json({ message: error }, { status: 404 });
+    return NextResponse.json({ item: { id: user.id, email: user.email } });
+  } catch (e) {
+    return NextResponse.json({ message: 'Gagal menghapus user' }, { status: 500 });
   }
 }

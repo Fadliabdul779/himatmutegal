@@ -77,3 +77,12 @@ export function listUsers(filters = {}) {
   }
   return result;
 }
+
+export function deleteUser(id) {
+  const users = getUsers();
+  const idx = users.findIndex(u => u.id === id);
+  if (idx === -1) return { error: 'User tidak ditemukan' };
+  const [removed] = users.splice(idx, 1);
+  saveUsers(users);
+  return { user: removed };
+}

@@ -32,10 +32,10 @@ export default async function MemberDashboard() {
       <p className="mt-2 text-slate-600">Area khusus anggota HIMATIKA.</p>
       <div className="mt-6 grid sm:grid-cols-2 md:grid-cols-3 gap-4">
         {cards.map((c) => (
-          <a key={c.href} href={c.href} className="block border rounded-lg p-4 hover:shadow-sm transition">
+          <Link key={c.href} href={c.href} className="block border rounded-lg p-4 hover:shadow-sm transition">
             <div className="font-medium">{c.title}</div>
             <p className="mt-1 text-sm text-slate-600">{c.desc}</p>
-          </a>
+          </Link>
         ))}
       </div>
 
