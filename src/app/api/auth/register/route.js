@@ -6,7 +6,7 @@ import { createUser, findUserByEmail } from '../../../../lib/users';
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { name, email, password, role } = body || {};
+    const { name, email, password, role, nim, prodi } = body || {};
     if (!name || !email || !password) {
       return NextResponse.json({ message: 'Nama, email, dan password wajib' }, { status: 400 });
     }
@@ -14,13 +14,13 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Role tidak valid' }, { status: 400 });
     }
 
-    const existing = findUserByEmail(email);
+    const existing = await findUserByEmail(email);
     if (existing) {
       return NextResponse.json({ message: 'Email sudah terdaftar, silakan login atau reset password' }, { status: 400 });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const { user } = createUser({ name, email, role: role || 'member', status: 'pending', passwordHash });
+    const { user } = await createUser({ name, email, role: role || 'member', status: 'pending', passwordHash, meta: { nim, prodi, agree_coc: !!body.agree_coc } });
 
     // Kirim notifikasi ke Admin tentang pendaftar baru (jika konfigurasi email tersedia)
     try {

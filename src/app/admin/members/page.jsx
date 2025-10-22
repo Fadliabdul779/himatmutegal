@@ -166,6 +166,7 @@ export default function AdminMembersPage() {
                 <tr className="bg-slate-50">
                   <th className="text-left px-3 py-2">Nama</th>
                   <th className="text-left px-3 py-2">Email</th>
+                  <th className="text-left px-3 py-2">Info</th>
                   <th className="text-left px-3 py-2">Role</th>
                   <th className="text-left px-3 py-2">Status</th>
                   <th className="text-left px-3 py-2">Aksi</th>
@@ -176,6 +177,7 @@ export default function AdminMembersPage() {
                   <tr key={u.id} className="border-t">
                     <td className="px-3 py-2">{u.name || '-'}</td>
                     <td className="px-3 py-2">{u.email}</td>
+                    <td className="px-3 py-2">{u.meta?.nim || u.meta?.prodi ? <>NIM: {u.meta?.nim || '-'}{u.meta?.prodi ? `, Prodi: ${u.meta.prodi}` : ''}</> : '-'}</td>
                     <td className="px-3 py-2 capitalize">{u.role}</td>
                     <td className="px-3 py-2 capitalize">{u.status}</td>
                     <td className="px-3 py-2">
@@ -187,7 +189,7 @@ export default function AdminMembersPage() {
                           <button onClick={() => reject(u.id)} className="text-red-600">Reject</button>
                         )}
                         <button onClick={() => openReset(u)} className="text-slate-700">Reset Password</button>
-+                       <button onClick={() => removeUser(u.id, u.email)} className="text-red-600">Hapus</button>
+                        <button onClick={() => removeUser(u.id, u.email)} className="text-red-600">Hapus</button>
                       </div>
                     </td>
                   </tr>

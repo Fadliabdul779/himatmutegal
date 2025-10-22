@@ -16,7 +16,7 @@ export default function MemberLoginPage() {
     const password = form.password.value;
     const res = await signIn("credentials", { email, password, role: 'member', redirect: false });
     if (res?.ok) {
-      window.location.href = "/";
+      window.location.href = "/member";
     } else {
       setError("Login gagal");
     }

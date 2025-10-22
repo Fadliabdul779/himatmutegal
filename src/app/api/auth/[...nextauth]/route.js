@@ -27,14 +27,28 @@ export const authOptions = {
           return { id: 'admin', name: 'Admin', email: adminEmail, role: 'admin' };
         }
         if (credentials?.email === structEmail && credentials?.password === structPassword) {
+          try {
+            const existingStruct = await findUserByEmail(structEmail);
+            if (!existingStruct) {
+              const passwordHash = await bcrypt.hash(structPassword, 10);
+              await createUser({ name: 'Struktural', email: structEmail, role: 'struct', status: 'approved', passwordHash });
+            }
+          } catch {}
           return { id: 'struct', name: 'Struktural', email: structEmail, role: 'struct' };
         }
         if (credentials?.email === memberEmail && credentials?.password === memberPassword) {
+          try {
+            const existingMember = await findUserByEmail(memberEmail);
+            if (!existingMember) {
+              const passwordHash = await bcrypt.hash(memberPassword, 10);
+              await createUser({ name: 'Anggota', email: memberEmail, role: 'member', status: 'approved', passwordHash });
+            }
+          } catch {}
           return { id: 'member', name: 'Anggota', email: memberEmail, role: 'member' };
         }
         // Dynamic users from store
         if (credentials?.email && credentials?.password) {
-          const u = findUserByEmail(credentials.email);
+          const u = await findUserByEmail(credentials.email);
           if (u && u.passwordHash && u.status === 'approved') {
             const ok = await bcrypt.compare(credentials.password, u.passwordHash);
             if (ok) return { id: u.id, name: u.name || 'User', email: u.email, role: u.role };
@@ -66,13 +80,12 @@ export const authOptions = {
             role = 'struct';
             status = 'approved';
           } else {
-            const existing = findUserByEmail(email);
+            const existing = await findUserByEmail(email);
             if (existing) {
               role = existing.role || 'member';
               status = existing.status || 'pending';
             } else {
-              // Create pending member automatically for first-time Google sign-in
-              const created = createUser({ name: user.name || 'User', email, role: 'member', status: 'pending' });
+              const created = await createUser({ name: user.name || 'User', email, role: 'member', status: 'pending' });
 
               // Notify Admin about new Google sign-in registration (pending approval)
               try {

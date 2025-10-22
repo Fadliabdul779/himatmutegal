@@ -19,7 +19,7 @@ export async function PUT(req) {
     const { id, newPassword } = await req.json();
     if (!id || !newPassword) return NextResponse.json({ message: 'ID dan password baru wajib' }, { status: 400 });
     const passwordHash = await bcrypt.hash(newPassword, 10);
-    const { user, error } = updateUser(id, { passwordHash });
+    const { user, error } = await updateUser(id, { passwordHash });
     if (error) return NextResponse.json({ message: error }, { status: 404 });
     return NextResponse.json({ item: { id: user.id, email: user.email } });
   } catch (e) {

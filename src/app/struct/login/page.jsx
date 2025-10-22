@@ -16,7 +16,7 @@ export default function StructLoginPage() {
     const password = form.password.value;
     const res = await signIn("credentials", { email, password, role: 'struct', redirect: false });
     if (res?.ok) {
-      window.location.href = "/";
+      window.location.href = "/struct";
     } else {
       setError("Login gagal");
     }
