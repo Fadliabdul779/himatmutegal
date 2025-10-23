@@ -4,9 +4,13 @@ import { get as ecGet } from '@vercel/edge-config';
 
 const dataDir = path.join(process.cwd(), '.data');
 const usersFile = path.join(dataDir, 'users.json');
-const EDGE_CONFIG_ID = process.env.EDGE_CONFIG;
-const EDGE_CONFIG_TOKEN = process.env.EDGE_CONFIG_TOKEN;
-const USE_EDGE = !!EDGE_CONFIG_ID && !!EDGE_CONFIG_TOKEN;
+
+// Correct env usage: EDGE_CONFIG is a connection string (read-only),
+// EDGECONFIG_ID is the resource ID (ecfg_...), EDGECONFIG_TOKEN is a write token
+const EDGE_CONFIG_CONN = process.env.EDGE_CONFIG; // e.g. https://edge-config.vercel.com/<id>?token=<READ_TOKEN>
+const EDGECONFIG_ID = process.env.EDGECONFIG_ID; // e.g. ecfg_...
+const EDGECONFIG_TOKEN = process.env.EDGECONFIG_TOKEN; // Management API write token
+const USE_EDGE = !!EDGE_CONFIG_CONN && !!EDGECONFIG_ID && !!EDGECONFIG_TOKEN;
 
 function ensureStore() {
   try {
@@ -49,13 +53,17 @@ async function edgeGetUsers() {
 
 async function edgeSaveUsers(users) {
   try {
-    const res = await fetch(`https://api.vercel.com/v1/edge-config/${EDGE_CONFIG_ID}/items`, {
+    const res = await fetch(`https://api.vercel.com/v1/edge-config/${EDGECONFIG_ID}/items`, {
       method: 'PATCH',
       headers: {
-        'Authorization': `Bearer ${EDGE_CONFIG_TOKEN}`,
+        'Authorization': `Bearer ${EDGECONFIG_TOKEN}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ operations: [{ op: 'upsert', key: 'users', value: users }] }),
+      body: JSON.stringify({
+        items: [
+          { operation: 'upsert', key: 'users', value: users },
+        ],
+      }),
     });
     return res.ok;
   } catch {
