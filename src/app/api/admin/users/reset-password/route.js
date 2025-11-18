@@ -3,6 +3,9 @@ import { getToken } from 'next-auth/jwt';
 import bcrypt from 'bcryptjs';
 import { updateUser } from '../../../../../lib/users';
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 async function requireAdmin(req) {
   if (process.env.DISABLE_ADMIN_PROTECTION === 'true') return null;
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET || 'devsecret' });

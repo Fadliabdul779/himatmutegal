@@ -6,6 +6,9 @@ import bcrypt from 'bcryptjs';
 import { getRoleEmails } from '../../../../lib/roleEmails';
 import { findUserByEmail, createUser } from '../../../../lib/users';
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export const authOptions = {
   providers: [
     Credentials({

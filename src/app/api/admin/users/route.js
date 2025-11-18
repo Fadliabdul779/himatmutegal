@@ -4,6 +4,9 @@ import bcrypt from 'bcryptjs';
 import sgMail from '@sendgrid/mail';
 import { listUsers, updateUser, findUserByEmail, createUser, deleteUser, findUserById } from '../../../../lib/users';
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 async function requireAdmin(req) {
   if (process.env.DISABLE_ADMIN_PROTECTION === 'true') return null;
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET || 'devsecret' });

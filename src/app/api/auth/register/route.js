@@ -3,6 +3,9 @@ import sgMail from '@sendgrid/mail';
 import bcrypt from 'bcryptjs';
 import { createUser, findUserByEmail } from '../../../../lib/users';
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export async function POST(req) {
   try {
     const body = await req.json();

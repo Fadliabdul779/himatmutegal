@@ -2,6 +2,9 @@ import sgMail from '@sendgrid/mail';
 import { NextResponse } from 'next/server';
 import { createUser, findUserByEmail } from '../../../../lib/users';
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export async function POST(req) {
   const body = await req.json();
   const { nama, nim, email, prodi, agree_coc } = body || {};
