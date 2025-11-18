@@ -8,6 +8,8 @@ const __dirname = path.dirname(__filename)
 const nextConfig = {
   // Explicitly set workspace root to avoid Next.js mis-detecting due to multiple lockfiles
   outputFileTracingRoot: __dirname,
+  // Opt-out couchbase from server bundling; use native Node.js require at runtime
+  serverExternalPackages: ['couchbase'],
 }
 
 export default nextConfig
