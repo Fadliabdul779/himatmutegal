@@ -20,6 +20,9 @@ export async function POST(req) {
         status: 'pending',
         meta: { nim, prodi, agree_coc: !!agree_coc },
       });
+      if (created?.error) {
+        return NextResponse.json({ message: created.error }, { status: 500 });
+      }
       // Beri tahu admin jika konfigurasi email tersedia
       try {
         if (created?.user && process.env.SENDGRID_API_KEY && process.env.EMAIL_ADMIN && process.env.EMAIL_FROM) {

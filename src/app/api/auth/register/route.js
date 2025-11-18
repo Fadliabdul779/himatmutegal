@@ -20,7 +20,10 @@ export async function POST(req) {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const { user } = await createUser({ name, email, role: role || 'member', status: 'pending', passwordHash, meta: { nim, prodi, agree_coc: !!body.agree_coc } });
+    const { user, error } = await createUser({ name, email, role: role || 'member', status: 'pending', passwordHash, meta: { nim, prodi, agree_coc: !!body.agree_coc } });
+    if (error) {
+      return NextResponse.json({ message: error }, { status: 500 });
+    }
 
     // Kirim notifikasi ke Admin tentang pendaftar baru (jika konfigurasi email tersedia)
     try {

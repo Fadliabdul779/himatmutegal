@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { get as ecGet } from '@vercel/edge-config';
+import couchbase from 'couchbase';
 
 const dataDir = path.join(process.cwd(), '.data');
 const usersFile = path.join(dataDir, 'users.json');
@@ -11,6 +12,27 @@ const EDGE_CONFIG_CONN = process.env.EDGE_CONFIG; // e.g. https://edge-config.ve
 const EDGECONFIG_ID = process.env.EDGECONFIG_ID; // e.g. ecfg_...
 const EDGECONFIG_TOKEN = process.env.EDGECONFIG_TOKEN; // Management API write token
 const USE_EDGE = !!EDGE_CONFIG_CONN && !!EDGECONFIG_ID && !!EDGECONFIG_TOKEN;
+
+// Couchbase Capella/Cluster
+const CB_CONNSTR = process.env.COUCHBASE_CONNSTR; // e.g. couchbases://cb.mz5ruyuobgxggmtn.cloud.couchbase.com
+const CB_USERNAME = process.env.COUCHBASE_USERNAME;
+const CB_PASSWORD = process.env.COUCHBASE_PASSWORD;
+const CB_BUCKET = process.env.COUCHBASE_BUCKET; // e.g. himatika
+const USE_CB = !!CB_CONNSTR && !!CB_USERNAME && !!CB_PASSWORD && !!CB_BUCKET;
+
+let cbColl = null;
+async function initCouchbase() {
+  if (cbColl) return cbColl;
+  try {
+    const cluster = await couchbase.connect(CB_CONNSTR, { username: CB_USERNAME, password: CB_PASSWORD });
+    const bucket = cluster.bucket(CB_BUCKET);
+    cbColl = bucket.defaultCollection();
+    return cbColl;
+  } catch (e) {
+    console.error('couchbase init error', e);
+    return null;
+  }
+}
 
 function ensureStore() {
   try {
@@ -37,6 +59,35 @@ function fsSaveUsers(users) {
     fs.writeFileSync(usersFile, JSON.stringify({ users }, null, 2));
     return true;
   } catch {
+    return false;
+  }
+}
+
+// ---------- Couchbase helpers ----------
+async function couchbaseGetUsers() {
+  try {
+    const coll = await initCouchbase();
+    if (!coll) return [];
+    const res = await coll.get('users');
+    const content = res?.content ?? null;
+    if (Array.isArray(content)) return content; // stored as array
+    if (Array.isArray(content?.users)) return content.users; // stored as { users }
+    return [];
+  } catch (e) {
+    // If doc not found or other error, return empty
+    return [];
+  }
+}
+
+async function couchbaseSaveUsers(users) {
+  try {
+    const coll = await initCouchbase();
+    if (!coll) return false;
+    // store as array for simplicity
+    await coll.upsert('users', users);
+    return true;
+  } catch (e) {
+    console.error('couchbase save error', e);
     return false;
   }
 }
@@ -73,11 +124,13 @@ async function edgeSaveUsers(users) {
 
 // ---------- Public API (async for Edge, sync for FS) ----------
 export async function getUsers() {
+  if (USE_CB) return await couchbaseGetUsers();
   if (USE_EDGE) return await edgeGetUsers();
   return fsGetUsers();
 }
 
 export async function saveUsers(users) {
+  if (USE_CB) return await couchbaseSaveUsers(users);
   if (USE_EDGE) return await edgeSaveUsers(users);
   return fsSaveUsers(users);
 }
@@ -100,7 +153,8 @@ export async function createUser({ name, email, role = 'member', status = 'pendi
   const id = `u_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const user = { id, name, email, role, status, passwordHash, meta, createdAt: Date.now() };
   users.push(user);
-  await saveUsers(users);
+  const saved = await saveUsers(users);
+  if (!saved) return { error: 'Gagal menyimpan pengguna', user: null };
   return { user };
 }
 
@@ -109,7 +163,8 @@ export async function updateUser(id, patch = {}) {
   const idx = users.findIndex(u => u.id === id);
   if (idx === -1) return { error: 'User tidak ditemukan' };
   users[idx] = { ...users[idx], ...patch, updatedAt: Date.now() };
-  await saveUsers(users);
+  const saved = await saveUsers(users);
+  if (!saved) return { error: 'Gagal menyimpan perubahan pengguna' };
   return { user: users[idx] };
 }
 
@@ -131,6 +186,7 @@ export async function deleteUser(id) {
   const idx = users.findIndex(u => u.id === id);
   if (idx === -1) return { error: 'User tidak ditemukan' };
   const [removed] = users.splice(idx, 1);
-  await saveUsers(users);
+  const saved = await saveUsers(users);
+  if (!saved) return { error: 'Gagal menghapus pengguna' };
   return { user: removed };
 }
