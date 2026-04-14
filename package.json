@@ -19,7 +19,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.24",
     "groq": "^4.10.2",
-    "next": "15.5.4",
+    "next": "15.5.9",
     "next-auth": "^4.24.11",
     "next-sanity": "^11.4.2",
     "next-seo": "^6.8.0",
